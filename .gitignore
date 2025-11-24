@@ -35,3 +35,7 @@ Thumbs.db
 # Pipenv
 .venv/
 Pipfile.lock
+
+# Node.js
+node_modules/
+package-lock.json
