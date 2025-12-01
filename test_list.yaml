@@ -1,0 +1,142 @@
+tests:
+  - number: 1
+    test_case_id: "TC001"
+    name: "Chargement de la page d'accueil"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_index_page_loads"
+    criteria: "HTTP 200, template list.html chargé"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 2
+    test_case_id: "TC002"
+    name: "Affichage des tâches existantes"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_index_page_contains_tasks"
+    criteria: "Les tâches apparaissent dans le HTML"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 3
+    test_case_id: "TC003"
+    name: "Présence du formulaire d'ajout"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_index_page_contains_form"
+    criteria: "Formulaire présent dans le contexte"
+    impact: "Moyen"
+    status: "✓"
+
+  - number: 4
+    test_case_id: "TC004"
+    name: "Création d'une tâche valide"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_create_task_post"
+    criteria: "Redirection 302, tâche créée en BD"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 5
+    test_case_id: "TC005"
+    name: "Rejet de création avec données invalides"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_create_task_invalid_post"
+    criteria: "HTTP 200, pas de redirection, formulaire réaffiché"
+    impact: "Moyen"
+    status: "✓"
+
+  - number: 6
+    test_case_id: "TC006"
+    name: "Chargement de la page de modification"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_update_task_page_loads"
+    criteria: "HTTP 200, template update_task.html chargé"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 7
+    test_case_id: "TC007"
+    name: "Modification d'une tâche"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_update_task_post"
+    criteria: "Redirection 302, BD mise à jour"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 8
+    test_case_id: "TC008"
+    name: "Rejet de modification avec données invalides"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_update_task_invalid_post"
+    criteria: "HTTP 200, pas de modification en BD"
+    impact: "Moyen"
+    status: "✓"
+
+  - number: 9
+    test_case_id: "TC009"
+    name: "Chargement de la page de suppression"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_delete_task_page_loads"
+    criteria: "HTTP 200, template delete.html chargé"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 10
+    test_case_id: "TC010"
+    name: "Suppression d'une tâche"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_delete_task_post"
+    criteria: "Redirection 302, tâche supprimée de la BD"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 11
+    test_case_id: "TC011"
+    name: "Chargement du dataset"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.DatasetImportTests"
+    criteria: "5 tâches chargées depuis dataset.json avec bon statut"
+    impact: "Moyen"
+    status: "✓"
+
+  - number: 12
+    test_case_id: "TC012"
+    name: "Présence de la version de l'app"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.TaskViewTests.test_app_version_in_context"
+    criteria: "APP_VERSION présente dans le contexte"
+    impact: "Faible"
+    status: "✓"
+
+  - number: 13
+    test_case_id: "TC013"
+    name: "Couverture de code >= 95%"
+    type: "auto-unittest"
+    command: "pipenv run coverage run --source='tasks' manage.py test && pipenv run coverage report"
+    criteria: "Coverage >= 95%"
+    impact: "Moyen"
+    status: "À tester"
+
+  - number: 14
+    test_case_id: "TC014"
+    name: "Interface utilisateur responsive"
+    type: "manuel"
+    command: "Ouvrir l'app sur desktop, mobile et tablette"
+    criteria: "Affichage correct sur tous les écrans (1920x1080, 390x844, 1024x768)"
+    impact: "Moyen"
+    status: "À tester"
+
+  - number: 15
+    test_case_id: "TC015"
+    name: "Accessibilité WCAG 2.1 Niveau AA"
+    type: "auto-unittest"
+    command: "./test-accessibility.ps1"
+    criteria: "Score 100% pa11y, navigation au clavier, contraste des couleurs"
+    impact: "Critique"
+    status: "✓"
+
+summary:
+  total_tests: 15
+  auto_tests: 14
+  manual_tests: 1
+  last_updated: "2025-12-01"
+  run_all_command: "./build.ps1 -version 1.0.0"

@@ -13,7 +13,7 @@ Write-Host ""
 
 # Run linter
 Write-Host "Running Ruff linter..." -ForegroundColor Yellow
-python -m pipenv run ruff check .
+pipenv run ruff check .
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Linter failed. Fix errors before building." -ForegroundColor Red
     exit 1
