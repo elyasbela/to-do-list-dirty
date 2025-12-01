@@ -1,6 +1,53 @@
-<p>Are you sure you want to delete "{{ item }}"?</p>
-<a href="{% url 'list' %}">Cancel</a>
-<form method="POST" action=""> 
-	{% csrf_token %}
-	<input type="submit" name="confirm">
-</form>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer une tâche</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #3a86ff;
+        }
+
+        .center-column {
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 6px 2px 30px 0px rgba(0, 0, 0, 0.75);
+        }
+
+        h1 {
+            text-align: center;
+            color: #fb5607;
+            margin-bottom: 20px;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="center-column">
+            <h1>Supprimer une tâche</h1>
+            <div class="warning-box" role="alert">
+                <p><strong>Êtes-vous sûr de vouloir supprimer cette tâche ?</strong></p>
+                <p>Tâche : <strong>{{ item.title }}</strong></p>
+            </div>
+            <form method="POST" aria-label="Formulaire de suppression de tâche">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" aria-label="Confirmer la suppression">Supprimer</button>
+                <a href="/" class="btn btn-secondary" aria-label="Annuler et retour à la liste">Annuler</a>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

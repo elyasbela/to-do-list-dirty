@@ -1,7 +1,54 @@
-<h3>Update task</h3>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier une tâche</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #3a86ff;
+        }
 
-<form method="POST" action="">
-	{% csrf_token %}
-	{{ form }}
-	<input type="submit" name="Update Task">
-</form>
+        .center-column {
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 6px 2px 30px 0px rgba(0, 0, 0, 0.75);
+        }
+
+        h1 {
+            text-align: center;
+            color: #fb5607;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="center-column">
+            <h1>Modifier une tâche</h1>
+            <form method="POST" aria-label="Formulaire de modification de tâche">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary" aria-label="Enregistrer les modifications">Enregistrer</button>
+                <a href="/" class="btn btn-secondary" aria-label="Retour à la liste">Retour</a>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

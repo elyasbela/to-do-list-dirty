@@ -1,0 +1,12 @@
+{
+  "name": "todolist-accessibility",
+  "version": "1.0.0",
+  "description": "Accessibility tests for ToDo List",
+  "scripts": {
+    "test:a11y": "pa11y-ci"
+  },
+  "devDependencies": {
+    "pa11y": "^6.2.3",
+    "pa11y-ci": "^3.0.0"
+  }
+}
