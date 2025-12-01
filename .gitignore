@@ -39,3 +39,12 @@ Pipfile.lock
 # Node.js
 node_modules/
 package-lock.json
+
+# Coverage
+.coverage
+.coverage.xml
+htmlcov/
+
+# Build artifacts
+*.zip
+todolist-*.zip

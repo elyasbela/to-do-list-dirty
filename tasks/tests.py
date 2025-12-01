@@ -1,3 +1,7 @@
+import json
+import os
+
+from django.conf import settings
 from django.test import Client, TestCase
 
 from .models import Task
@@ -50,6 +54,14 @@ class TaskViewTests(TestCase):
         self.assertEqual(self.task.title, "Updated Task")
         self.assertTrue(self.task.complete)
 
+    def test_update_task_invalid_post(self):
+        """Test updating a task with invalid data"""
+        response = self.client.post(
+            f"/update_task/{self.task.id}/",
+            {}
+        )
+        self.assertEqual(response.status_code, 200)
+
     def test_delete_task_page_loads(self):
         """Test that the delete task page loads"""
         response = self.client.get(f"/delete_task/{self.task.id}/")
@@ -68,8 +80,24 @@ class TaskViewTests(TestCase):
         response = self.client.get("/")
         self.assertIn("APP_VERSION", response.context)
 
+
 class DatasetImportTests(TestCase):
-    fixtures = ["dataset.json"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # Load dataset.json from root
+        dataset_path = os.path.join(settings.BASE_DIR, "dataset.json")
+        with open(dataset_path, "r") as f:
+            data = json.load(f)
+
+        # Import tasks from dataset
+        for item in data:
+            if item["model"] == "tasks.task":
+                Task.objects.create(
+                    id=item["pk"],
+                    title=item["fields"]["title"],
+                    complete=item["fields"]["complete"]
+                )
 
     def test_dataset_loads_correctly(self):
         """Test that dataset.json loads all tasks"""

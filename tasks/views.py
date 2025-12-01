@@ -19,7 +19,7 @@ def index(request):
     return render(request, "tasks/list.html", context)
 
 
-def updateTask(request, pk):
+def update_task(request, pk):
     task = Task.objects.get(id=pk)
     form = TaskForm(instance=task)
 
@@ -33,7 +33,7 @@ def updateTask(request, pk):
     return render(request, "tasks/update_task.html", context)
 
 
-def deleteTask(request, pk):
+def delete_task(request, pk):
     item = Task.objects.get(id=pk)
 
     if request.method == "POST":
