@@ -151,3 +151,129 @@ class DatasetImportTests(TestCase):
 
         self.assertEqual(completed, 2)
         self.assertEqual(incomplete, 3)
+
+
+class PriorityTaskTests(TestCase):
+    """Test suite for priority task functionality"""
+
+    def setUp(self):
+        self.client = Client()
+
+    @tc("TC018")
+    def test_task_model_has_priority_field(self):
+        """Test that Task model has a priority field"""
+        task = Task.objects.create(title="Test Task", priority=True)
+        self.assertTrue(hasattr(task, 'priority'))
+        self.assertTrue(task.priority)
+
+    @tc("TC019")
+    def test_task_priority_defaults_to_false(self):
+        """Test that priority defaults to False when not specified"""
+        task = Task.objects.create(title="Test Task")
+        self.assertFalse(task.priority)
+
+    @tc("TC020")
+    def test_create_priority_task_via_form(self):
+        """Test creating a priority task through the web form"""
+        response = self.client.post("/", {
+            "title": "Priority Task",
+            "priority": True,
+            "complete": False
+        })
+        self.assertEqual(response.status_code, 302)
+
+        task = Task.objects.get(title="Priority Task")
+        self.assertTrue(task.priority)
+
+    @tc("TC021")
+    def test_priority_tasks_appear_first_in_list(self):
+        """Test that priority tasks are displayed before non-priority tasks"""
+        # Create non-priority task first
+        Task.objects.create(title="Normal Task 1", priority=False)
+        Task.objects.create(title="Normal Task 2", priority=False)
+
+        # Create priority task later
+        Task.objects.create(title="Priority Task", priority=True)
+
+        response = self.client.get("/")
+        tasks = response.context['tasks']
+
+        # First task should be the priority one
+        self.assertEqual(tasks[0].title, "Priority Task")
+        self.assertTrue(tasks[0].priority)
+
+    @tc("TC022")
+    def test_multiple_priority_tasks_maintain_order(self):
+        """Test that multiple priority tasks are ordered by creation date"""
+        # Create tasks in specific order
+        task1 = Task.objects.create(title="Priority Task 1", priority=True)
+        Task.objects.create(title="Normal Task", priority=False)
+        task3 = Task.objects.create(title="Priority Task 2", priority=True)
+
+        response = self.client.get("/")
+        tasks = list(response.context['tasks'])
+
+        # Priority tasks should come first
+        self.assertTrue(tasks[0].priority)
+        self.assertTrue(tasks[1].priority)
+        self.assertFalse(tasks[2].priority)
+
+        # Among priority tasks, older should come first
+        self.assertEqual(tasks[0].id, task1.id)
+        self.assertEqual(tasks[1].id, task3.id)
+
+    @tc("TC023")
+    def test_update_task_to_priority(self):
+        """Test updating an existing task to make it priority"""
+        task = Task.objects.create(title="Test Task", priority=False)
+
+        response = self.client.post(f"/update_task/{task.id}/", {
+            "title": "Test Task",
+            "priority": True,
+            "complete": False
+        })
+
+        self.assertEqual(response.status_code, 302)
+        task.refresh_from_db()
+        self.assertTrue(task.priority)
+
+    @tc("TC024")
+    def test_update_task_to_remove_priority(self):
+        """Test updating a priority task to remove priority flag"""
+        task = Task.objects.create(title="Test Task", priority=True)
+
+        response = self.client.post(f"/update_task/{task.id}/", {
+            "title": "Test Task",
+            "priority": False,
+            "complete": False
+        })
+
+        self.assertEqual(response.status_code, 302)
+        task.refresh_from_db()
+        self.assertFalse(task.priority)
+
+    @tc("TC025")
+    def test_priority_field_in_form(self):
+        """Test that priority checkbox appears in the form"""
+        response = self.client.get("/")
+        self.assertContains(response, 'name="priority"')
+
+    @tc("TC026")
+    def test_priority_field_in_update_form(self):
+        """Test that priority checkbox appears in update form"""
+        task = Task.objects.create(title="Test Task", priority=False)
+        response = self.client.get(f"/update_task/{task.id}/")
+        self.assertContains(response, 'name="priority"')
+
+    @tc("TC027")
+    def test_priority_task_visual_indicator(self):
+        """Test that priority tasks have a visual indicator in the list"""
+        Task.objects.create(title="Priority Task", priority=True)
+        Task.objects.create(title="Normal Task", priority=False)
+
+        response = self.client.get("/")
+        content = response.content.decode()
+
+        # Should contain priority badge
+        self.assertIn("PRIORITAIRE", content)
+        self.assertIn("Priority Task", content)

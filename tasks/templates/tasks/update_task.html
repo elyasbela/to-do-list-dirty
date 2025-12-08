@@ -30,11 +30,29 @@
             margin-top: 10px;
         }
 
-        input, textarea {
+        input[type="text"], textarea {
             width: 100%;
             padding: 12px 20px;
             margin: 8px 0;
             box-sizing: border-box;
+        }
+
+        .form-check {
+            margin: 15px 0;
+        }
+
+        .form-check-label {
+            font-weight: normal;
+            margin-left: 5px;
+        }
+
+        .priority-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -42,6 +60,11 @@
     <main>
         <div class="center-column">
             <h1>Modifier une tâche</h1>
+            
+            <div class="priority-info">
+                <strong>💡 Astuce :</strong> Les tâches prioritaires apparaissent en haut de la liste.
+            </div>
+            
             <form method="POST" aria-label="Formulaire de modification de tâche">
                 {% csrf_token %}
                 {{ form.as_p }}

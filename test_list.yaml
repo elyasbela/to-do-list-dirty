@@ -133,14 +133,16 @@ tests:
     criteria: "Score 100% pa11y, navigation au clavier, contraste des couleurs"
     impact: "Critique"
     status: "✓"
+
   - number: 16
     test_case_id: "TC016"
-    name: "CRUD complet manuel - Création et suppression de tâches"
-    type: "manuel"
-    command: "Test manuel - voir procédure dans le cahier de tests"
+    name: "CRUD complet - Création et suppression de tâches E2E"
+    type: "auto-selenium"
+    command: "pipenv run python tasks/test_e2e_selenium.py"
     criteria: "Nombre final = nombre initial après création/suppression de 10 tâches"
     impact: "Critique"
-    status: "À tester"
+    status: "✓"
+
   - number: 17
     test_case_id: "TC017"
     name: "Vérification des impacts croisés"
@@ -150,9 +152,100 @@ tests:
     impact: "Critique"
     status: "✓"
 
+  - number: 18
+    test_case_id: "TC018"
+    name: "Champ prioritaire dans le modèle"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_task_model_has_priority_field"
+    criteria: "Le modèle Task possède un champ priority de type booléen"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 19
+    test_case_id: "TC019"
+    name: "Valeur par défaut du champ prioritaire"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_task_priority_defaults_to_false"
+    criteria: "Le champ priority est False par défaut"
+    impact: "Moyen"
+    status: "✓"
+
+  - number: 20
+    test_case_id: "TC020"
+    name: "Création d'une tâche prioritaire via formulaire"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_create_priority_task_via_form"
+    criteria: "POST avec priority=True crée une tâche prioritaire"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 21
+    test_case_id: "TC021"
+    name: "Ordre d'affichage - Tâches prioritaires en premier"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_priority_tasks_appear_first_in_list"
+    criteria: "Les tâches prioritaires apparaissent avant les tâches normales"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 22
+    test_case_id: "TC022"
+    name: "Ordre des tâches prioritaires multiples"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_multiple_priority_tasks_maintain_order"
+    criteria: "Les tâches prioritaires sont triées par date de création"
+    impact: "Moyen"
+    status: "✓"
+
+  - number: 23
+    test_case_id: "TC023"
+    name: "Modification d'une tâche en prioritaire"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_update_task_to_priority"
+    criteria: "Une tâche normale peut devenir prioritaire via modification"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 24
+    test_case_id: "TC024"
+    name: "Retrait du statut prioritaire"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_update_task_to_remove_priority"
+    criteria: "Une tâche prioritaire peut redevenir normale"
+    impact: "Moyen"
+    status: "✓"
+
+  - number: 25
+    test_case_id: "TC025"
+    name: "Présence du champ prioritaire dans le formulaire d'ajout"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_priority_field_in_form"
+    criteria: "Le formulaire d'ajout contient une checkbox priority"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 26
+    test_case_id: "TC026"
+    name: "Présence du champ prioritaire dans le formulaire de modification"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_priority_field_in_update_form"
+    criteria: "Le formulaire de modification contient une checkbox priority"
+    impact: "Critique"
+    status: "✓"
+
+  - number: 27
+    test_case_id: "TC027"
+    name: "Indicateur visuel pour les tâches prioritaires"
+    type: "auto-unittest"
+    command: "pipenv run python manage.py test tasks.tests.PriorityTaskTests.test_priority_task_visual_indicator"
+    criteria: "Les tâches prioritaires ont un indicateur visuel (★, badge, etc.)"
+    impact: "Moyen"
+    status: "✓"
+
 summary:
-  total_tests: 15
-  auto_tests: 14
+  total_tests: 27
+  auto_unittest: 24
+  auto_selenium: 2
   manual_tests: 1
-  last_updated: "2025-12-01"
+  last_updated: "2025-12-08"
   run_all_command: "./build.ps1 -version 1.0.0"

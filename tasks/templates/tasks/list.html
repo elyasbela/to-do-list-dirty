@@ -41,6 +41,11 @@
             color: white;
         }
 
+        .item-row.priority {
+            background-color: #ff006e;
+            border-left: 5px solid #ffbe0b;
+        }
+
         .item-row a {
             color: #ffff00;
             text-decoration: underline;
@@ -48,6 +53,16 @@
 
         .item-row a:hover {
             color: #ffffff;
+        }
+
+        .priority-badge {
+            background-color: #ffbe0b;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            font-weight: bold;
         }
 
         h1 {
@@ -72,6 +87,14 @@
             background-color: #c82333;
             border-color: #bd2130;
         }
+
+        .form-check {
+            margin: 10px 0;
+        }
+
+        .form-check-label {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +105,14 @@
                 {% csrf_token %}
                 <label for="id_title">Nouvelle tâche :</label>
                 {{ form.title }}
+                
+                <div class="form-check">
+                    {{ form.priority }}
+                    <label class="form-check-label" for="id_priority">
+                        ⭐ Marquer comme prioritaire
+                    </label>
+                </div>
+                
                 <button type="submit" class="btn btn-primary submit" aria-label="Ajouter la tâche">Ajouter</button>
             </form>
 
@@ -90,9 +121,12 @@
                     <h2 style="font-size: 1.5rem; margin-top: 20px;">Tâches ({{ tasks.count }})</h2>
                     <ul style="list-style: none; padding: 0;">
                         {% for task in tasks %}
-                            <li class="item-row">
+                            <li class="item-row {% if task.priority %}priority{% endif %}">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span>
+                                        {% if task.priority %}
+                                            <span class="priority-badge">★ PRIORITAIRE</span>
+                                        {% endif %}
                                         {% if task.complete %}
                                             <strong style="text-decoration: line-through;">{{ task.title }}</strong>
                                             <span aria-label="Tâche complétée">(✓)</span>
