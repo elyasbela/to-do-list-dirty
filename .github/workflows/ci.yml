@@ -29,6 +29,10 @@ jobs:
       - name: Run ruff linter
         run: pipenv run ruff check .
 
+      - name: Apply Django migrations
+        run: pipenv run python manage.py migrate 
+
+
       # --------------------
       # TESTS DJANGO (UNITAIRES)
       # --------------------
