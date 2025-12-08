@@ -1,82 +1,114 @@
-
 Cahier de Tests - To-Do List Application
+
 1. Tests Automatisés (Unitaires & Intégration)
+
 - Test 1 : Chargement de la page d'accueil
 Type : Automatisé (Unitaire)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/0) test tasks.tests.TaskViewTests.test_index_page_loads
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_index_page_loads
 Critère : HTTP 200, template list.html chargé
 Impact : Critique
+
 - Test 2 : Affichage des tâches existantes
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/1) test tasks.tests.TaskViewTests.test_index_page_contains_tasks
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_index_page_contains_tasks
 Critère : Les tâches apparaissent dans le HTML
 Impact : Critique
+
 - Test 3 : Présence du formulaire d'ajout
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/2) test tasks.tests.TaskViewTests.test_index_page_contains_form
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_index_page_contains_form
 Critère : Formulaire présent dans le contexte
 Impact : Moyen
+
 - Test 4 : Création d'une tâche valide
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/3) test tasks.tests.TaskViewTests.test_create_task_post
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_create_task_post
 Critère : Redirection 302, tâche créée en BD
 Impact : Critique
+
 - Test 5 : Rejet de création avec données invalides
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/4) test tasks.tests.TaskViewTests.test_create_task_invalid_post
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_create_task_invalid_post
 Critère : HTTP 200, pas de redirection, formulaire réaffiché
 Impact : Moyen
+
 - Test 6 : Chargement de la page de modification
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/5) test tasks.tests.TaskViewTests.test_update_task_page_loads
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_update_task_page_loads
 Critère : HTTP 200, template update_task.html chargé
 Impact : Critique
+
 - Test 7 : Modification d'une tâche
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/6) test tasks.tests.TaskViewTests.test_update_task_post
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_update_task_post
 Critère : Redirection 302, BD mise à jour
 Impact : Critique
+
 - Test 8 : Rejet de modification avec données invalides
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/7) test tasks.tests.TaskViewTests.test_update_task_invalid_post
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_update_task_invalid_post
 Critère : HTTP 200, pas de modification en BD
 Impact : Moyen
+
 - Test 9 : Chargement de la page de suppression
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/8) test tasks.tests.TaskViewTests.test_delete_task_page_loads
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_delete_task_page_loads
 Critère : HTTP 200, template delete.html chargé
 Impact : Critique
+
 - Test 10 : Suppression d'une tâche
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/9) test tasks.tests.TaskViewTests.test_delete_task_post
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_delete_task_post
 Critère : Redirection 302, tâche supprimée de la BD
 Impact : Critique
+
 - Test 11 : Chargement du dataset
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/10) test tasks.tests.DatasetImportTests.test_dataset_loads_correctly
+Commande : pipenv run python manage.py test tasks.tests.DatasetImportTests.test_dataset_loads_correctly
 Critère : 5 tâches chargées depuis dataset.json
 Impact : Moyen
+
 - Test 12 : Présence de la version de l'app
 Type : Automatisé (Intégration)
-Commande : pipenv run python [manage.py](http://_vscodecontentref_/12) test tasks.tests.TaskViewTests.test_app_version_in_context
+Commande : pipenv run python manage.py test tasks.tests.TaskViewTests.test_app_version_in_context
 Critère : APP_VERSION présente dans le contexte
 Impact : Faible
+
 - Test 13 : Couverture de code >= 95%
 Type : Automatisé (Qualité)
-Commande : pipenv run coverage run --source='tasks' [manage.py](http://_vscodecontentref_/13) test && pipenv run coverage report
+Commande : pipenv run coverage run --source='tasks' manage.py test && pipenv run coverage report
 Critère : Coverage >= 95%
 Impact : Moyen
+
 2. Tests Manuels - Fonctionnalité
+
 - Test 14 : Interface utilisateur responsive
 Type : Manuel (Visuel)
 Procédure :
-Ouvrir l'app sur desktop (1920x1080)
-Ouvrir l'app sur mobile (iPhone 12 - 390x844)
-Ouvrir l'app sur tablette (iPad - 1024x768)
+  Ouvrir l'app sur desktop (1920x1080)
+  Ouvrir l'app sur mobile (iPhone 12 - 390x844)
+  Ouvrir l'app sur tablette (iPad - 1024x768)
 Critère : Affichage correct sur tous les écrans
 Impact : Moyen
+
 - Test 15 : Accessibilité WCAG 2.1 Niveau AA
 Type : Automatisé + Manuel (Accessibilité)
 Commande : test-accessibility.ps1
 Critère : Score 100% pa11y, navigation au clavier, contraste des couleurs
 Impact : Critique
+
+3. Tests End-to-End (E2E)
+
+- Test 16 : CRUD complet - Création et suppression de tâches
+Type : Automatisé (Selenium)
+Commande : pipenv run python tasks/test_e2e_selenium.py
+Procédure automatisée :
+  1. Se connecter à l'application via navigateur
+  2. Compter et noter le nombre initial de tâches affichées
+  3. Créer 10 nouvelles tâches via le formulaire d'ajout
+  4. Vérifier que le nombre de tâches a augmenté de 10
+  5. Supprimer les 10 tâches créées une par une
+  6. Compter à nouveau le nombre de tâches
+Critère : Le nombre final de tâches doit être égal au nombre initial
+Impact : Critique
+Rapport : result_test_selenium.json

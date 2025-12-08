@@ -1,0 +1,123 @@
+{
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "success_rate": "100.00%",
+    "duration_seconds": 179.97
+  },
+  "tests": [
+    {
+      "test_case_id": "TC016",
+      "test_name": "CRUD Complete Cycle - E2E",
+      "test_class": "TodoE2ETest",
+      "status": "PASS",
+      "message": "All operations completed successfully",
+      "error": null,
+      "steps": [
+        {
+          "step": "Setup",
+          "status": "PASS",
+          "message": "WebDriver initialized",
+          "timestamp": "2025-12-08T10:05:20.630963"
+        },
+        {
+          "step": "Navigation",
+          "status": "PASS",
+          "message": "Loaded http://127.0.0.1:8000",
+          "timestamp": "2025-12-08T10:05:20.992208"
+        },
+        {
+          "step": "Count Initial Tasks",
+          "status": "PASS",
+          "message": "Found 0 tasks",
+          "timestamp": "2025-12-08T10:05:31.065756"
+        },
+        {
+          "step": "Create Tasks",
+          "status": "PASS",
+          "message": "Created 10/10 tasks",
+          "timestamp": "2025-12-08T10:05:34.640168"
+        },
+        {
+          "step": "Verify Count After Creation",
+          "status": "WARN",
+          "message": "Expected 10, got 0",
+          "timestamp": "2025-12-08T10:05:44.648748"
+        },
+        {
+          "step": "Delete Tasks",
+          "status": "PASS",
+          "message": "Deleted 10/10 tasks",
+          "timestamp": "2025-12-08T10:07:29.464380"
+        }
+      ],
+      "metrics": {
+        "initial_count": 0,
+        "after_creation_count": 0,
+        "final_count": 0,
+        "tasks_created": 10,
+        "tasks_deleted": 10,
+        "duration_seconds": 142.62
+      },
+      "timestamp": "2025-12-08T10:05:16.910030"
+    },
+    {
+      "test_case_id": "TC017",
+      "test_name": "Cross Impact Verification - E2E",
+      "test_class": "TodoCrossImpactTest",
+      "status": "PASS",
+      "message": "Cross-impact verification successful",
+      "error": null,
+      "steps": [
+        {
+          "step": "Setup",
+          "status": "PASS",
+          "message": "WebDriver initialized",
+          "timestamp": "2025-12-08T10:07:46.608629"
+        },
+        {
+          "step": "Navigation",
+          "status": "PASS",
+          "message": "Loaded http://127.0.0.1:8000",
+          "timestamp": "2025-12-08T10:07:46.942820"
+        },
+        {
+          "step": "Create First Task",
+          "status": "PASS",
+          "message": "Task ID: 56",
+          "timestamp": "2025-12-08T10:07:48.242048"
+        },
+        {
+          "step": "Create Second Task",
+          "status": "PASS",
+          "message": "Task ID: 56",
+          "timestamp": "2025-12-08T10:07:49.408169"
+        },
+        {
+          "step": "Verify Tasks Before Deletion",
+          "status": "PASS",
+          "message": "Both tasks exist",
+          "timestamp": "2025-12-08T10:07:49.452733"
+        },
+        {
+          "step": "Delete Second Task",
+          "status": "PASS",
+          "message": "Deleted task ID: 56",
+          "timestamp": "2025-12-08T10:07:59.954096"
+        }
+      ],
+      "metrics": {
+        "first_task_title": "Cross Impact Test - Task A - 1765184866",
+        "first_task_id": "56",
+        "second_task_title": "Cross Impact Test - Task B - 1765184868",
+        "second_task_id": "56",
+        "first_task_still_exists": true,
+        "duration_seconds": 37.35
+      },
+      "timestamp": "2025-12-08T10:07:43.166688"
+    }
+  ]
+}

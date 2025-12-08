@@ -30,12 +30,11 @@ def load_json_results(json_path):
             data = json.load(f)
             return data
     except FileNotFoundError:
-        print(f"⚠️  Warning: Result file not found: {json_path}")
-        print("Assuming no automated tests have been run yet.\n")
+        # Return empty results if file not found (not an error for optional files)
         return {'tests': []}
     except json.JSONDecodeError as e:
-        print(f"❌ Error parsing JSON: {e}")
-        sys.exit(1)
+        print(f"⚠️  Warning: Error parsing JSON {json_path}: {e}")
+        return {'tests': []}
 
 
 def find_test_result(test_case_id, json_results):
@@ -55,7 +54,7 @@ def get_status_icon(test, json_results):
     if test_type == 'manuel':
         return '🫱', 'Manual test needed'
 
-    # For automated tests, check JSON results
+    # For automated tests (including unittest and selenium), check JSON results
     result = find_test_result(test_case_id, json_results)
 
     if result is None:
@@ -78,12 +77,24 @@ def generate_report():
     """Generate the test report"""
     # Paths
     yaml_path = os.path.join(project_root, 'test_list.yaml')
-    json_path = os.path.join(project_root, 'result_test_auto.json')
+    json_auto_path = os.path.join(project_root, 'result_test_auto.json')
+    json_selenium_path = os.path.join(project_root, 'result_test_selenium.json')
 
     # Load data
     print("Lecture des tests auto via result_test_auto.json… ", end='')
-    json_results = load_json_results(json_path)
-    print("OK\n")
+    json_auto_results = load_json_results(json_auto_path)
+    auto_tests_count = len(json_auto_results.get('tests', []))
+    print(f"OK ({auto_tests_count} tests)")
+
+    print("Lecture des tests E2E via result_test_selenium.json… ", end='')
+    json_selenium_results = load_json_results(json_selenium_path)
+    selenium_tests_count = len(json_selenium_results.get('tests', []))
+    print(f"OK ({selenium_tests_count} tests)\n")
+
+    # Merge results from both sources
+    json_results = {
+        'tests': json_auto_results.get('tests', []) + json_selenium_results.get('tests', [])
+    }
 
     # Load test definitions
     tests = load_yaml_tests(yaml_path)
@@ -103,6 +114,8 @@ def generate_report():
 
     total_tests = len(tests)
     manual_tests = len([t for t in tests if t.get('type') == 'manuel'])
+    auto_unittest_tests = len([t for t in tests if t.get('type') == 'auto-unittest'])
+    auto_selenium_tests = len([t for t in tests if t.get('type') == 'auto-selenium'])
 
     # Count automated test results
     passed = 0
@@ -127,6 +140,10 @@ def generate_report():
     passed_manual_pct = ((passed + manual_tests) / total_tests * 100) if total_tests > 0 else 0
 
     print(f"Number of tests: {total_tests}")
+    print(f"  - Unit/Integration tests: {auto_unittest_tests}")
+    print(f"  - E2E Selenium tests: {auto_selenium_tests}")
+    print(f"  - Manual tests: {manual_tests}")
+    print("")
     print(f"✅ Passed tests: {passed} ({passed_pct:.1f}%)")
     print(f"❌ Failed tests: {failed} ({failed_pct:.1f}%)")
     print(f"🕳️  Not found tests: {not_found} ({not_found_pct:.1f}%)")
@@ -156,6 +173,15 @@ def generate_report():
             print(f"  Test: {result.get('test_class')}.{result.get('test_name')}")
             if result.get('message'):
                 print(f"  Message: {result.get('message')[:100]}")
+
+            # Show metrics for Selenium tests
+            if 'metrics' in result:
+                metrics = result['metrics']
+                print("  Metrics:")
+                print(f"    - Initial count: {metrics.get('initial_count', 'N/A')}")
+                print(f"    - Tasks created: {metrics.get('tasks_created', 'N/A')}")
+                print(f"    - Tasks deleted: {metrics.get('tasks_deleted', 'N/A')}")
+                print(f"    - Final count: {metrics.get('final_count', 'N/A')}")
 
 
 if __name__ == '__main__':
