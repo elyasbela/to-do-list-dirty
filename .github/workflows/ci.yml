@@ -27,7 +27,7 @@ jobs:
       # LINTER (Ruff)
       # --------------------
       - name: Run ruff linter
-        run: pipenv run ruff check . --format json > ruff-report.json
+        run: pipenv run ruff check .
 
       # --------------------
       # TESTS DJANGO (UNITAIRES)
