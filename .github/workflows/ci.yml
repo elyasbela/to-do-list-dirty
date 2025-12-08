@@ -32,24 +32,24 @@ jobs:
       # --------------------
       # TESTS DJANGO (UNITAIRES)
       # --------------------
-      - name: Run Django unit tests + JSON report
+      - name: Run Django unit tests 
         run: |
-          pipenv run python manage.py test tasks.tests --noinput --testrunner=xmlrunner.extra.djangotestrunner.XMLTestRunner --output-file unit-report.json
+          pipenv run python manage.py test tasks.tests
 
       # --------------------
       # TESTS SELENIUM (END-TO-END)
       # --------------------
       - name: Run Selenium E2E tests
         run: |
-          pipenv run python manage.py test e2e.tests --noinput --testrunner=xmlrunner.extra.djangotestrunner.XMLTestRunner --output-file selenium-report.json
-
+          chmod +x run_e2e_tests.ps1
+          pwsh ./run_e2e_tests.ps1 
       # --------------------
       # TESTS ACCESSIBILITÉ
       # --------------------
       - name: Run accessibility tests
         run: |
-          chmod +x test-accessibility.ps1
-          pwsh ./test-accessibility.ps1 --jsonOutput accessibility-report.json
+          chmod +x run_e2e_tests.ps1
+          pwsh ./run_e2e_tests.ps1 
 
       # --------------------
       # AGRÉGATION DES RAPPORTS
