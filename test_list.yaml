@@ -133,6 +133,22 @@ tests:
     criteria: "Score 100% pa11y, navigation au clavier, contraste des couleurs"
     impact: "Critique"
     status: "✓"
+  - number: 16
+    test_case_id: "TC016"
+    name: "CRUD complet manuel - Création et suppression de tâches"
+    type: "manuel"
+    command: "Test manuel - voir procédure dans le cahier de tests"
+    criteria: "Nombre final = nombre initial après création/suppression de 10 tâches"
+    impact: "Critique"
+    status: "À tester"
+  - number: 17
+    test_case_id: "TC017"
+    name: "Vérification des impacts croisés"
+    type: "auto-selenium"
+    command: "pipenv run python tasks/test_e2e_cross_impact.py"
+    criteria: "La première tâche doit rester après suppression de la seconde"
+    impact: "Critique"
+    status: "✓"
 
 summary:
   total_tests: 15

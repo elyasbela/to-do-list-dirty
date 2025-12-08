@@ -48,3 +48,6 @@ htmlcov/
 # Build artifacts
 *.zip
 todolist-*.zip
+
+# Images
+*.png
