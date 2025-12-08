@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
+      # --------------------
+      # LINTER (Ruff)
+      # --------------------
+      - name: Run ruff linter
+        run: pipenv run ruff check . --format json > ruff-report.json
+
+      # --------------------
+      # TESTS DJANGO (UNITAIRES)
+      # --------------------
+      - name: Run Django unit tests + JSON report
+        run: |
+          pipenv run python manage.py test tasks.tests --noinput --testrunner=xmlrunner.extra.djangotestrunner.XMLTestRunner --output-file unit-report.json
+
+      # --------------------
+      # TESTS SELENIUM (END-TO-END)
+      # --------------------
+      - name: Run Selenium E2E tests
+        run: |
+          pipenv run python manage.py test e2e.tests --noinput --testrunner=xmlrunner.extra.djangotestrunner.XMLTestRunner --output-file selenium-report.json
+
+      # --------------------
+      # TESTS ACCESSIBILITÉ
+      # --------------------
+      - name: Run accessibility tests
+        run: |
+          chmod +x test-accessibility.ps1
+          pwsh ./test-accessibility.ps1 --jsonOutput accessibility-report.json
+
+      # --------------------
+      # AGRÉGATION DES RAPPORTS
+      # --------------------
+      - name: Run test report aggregator
+        id: report
+        run: |
+          pipenv run python scripts/aggregate_reports.py \
+            --linter ruff-report.json \
+            --unit unit-report.json \
+            --selenium selenium-report.json \
+            --a11y accessibility-report.json \
+            --out final-report.json
+
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          cat final-report.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      # --------------------
+      # COMMENTAIRE SUR LA PULL REQUEST
+      # --------------------
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: test-report
+          message: |
+            ## 🧪 Résultats des tests
+
+            ```json
+            ${{ steps.report.outputs.report }}
+            ```
+
+            ### 🔍 Tests manuels restants
+            - Vérifier la navigation principale
+            - Vérifier les formulaires critiques
+            - Vérifier les workflows utilisateur haut niveau
