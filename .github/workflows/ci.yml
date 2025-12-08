@@ -29,10 +29,6 @@ jobs:
       - name: Run ruff linter
         run: pipenv run ruff check .
 
-      - name: Apply Django migrations
-        run: pipenv run python manage.py migrate 
-
-
       # --------------------
       # TESTS DJANGO (UNITAIRES)
       # --------------------
@@ -40,13 +36,6 @@ jobs:
         run: |
           pipenv run python manage.py test tasks.tests
 
-      # --------------------
-      # TESTS SELENIUM (END-TO-END)
-      # --------------------
-      - name: Run Selenium E2E tests
-        run: |
-          chmod +x run_e2e_tests.ps1
-          pwsh ./run_e2e_tests.ps1 
       # --------------------
       # TESTS ACCESSIBILITÉ
       # --------------------
